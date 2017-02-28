@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.vtfl</groupId>
-  <artifactId>CompteurWeb</artifactId>
+  <artifactId>APP_TWAP</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>CompteurWeb Maven Webapp</name>
+  <name>APP_TWAP Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
@@ -75,7 +75,7 @@
       </dependency>
   </dependencies>
   <build>
-    <finalName>CompteurWeb</finalName>
+    <finalName>APP_TWAP</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
