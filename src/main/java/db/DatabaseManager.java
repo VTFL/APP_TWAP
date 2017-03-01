@@ -1,29 +1,49 @@
 package db;
 
-import beans.Compteur;
+import beans.Passages;
 
-import java.io.InputStream;
-import java.sql.*;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 
-/**
- * Created by thiba on 03/11/2016.
- */
 public class DatabaseManager {
     private  Connection conn;
     public DatabaseManager() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             this.conn = DriverManager.getConnection
-                    ("jdbc:mysql://defortet.ddns.net:3306/compteurweb", "vtfl", "vtfl");
+                    ("jdbc:mysql://defortet.ddns.net:3306/twap", "vtfl", "vtfl");
         } catch (Exception e) {
             e.printStackTrace();
         }
         //conn.close();
     }
-
+    public ArrayList<Passages> getPassages(){
+        ArrayList<Passages> ret = new ArrayList<>();
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet resultat = stmt.executeQuery( "SELECT id,passager,arret,date,direction  FROM passages");
+            int id=0;
+            String passager="";
+            String arret="";
+            String date="";
+            String direction="";
+            Passages p;
+            while ( resultat.next() ) {
+                id = resultat.getInt("id");
+                passager = resultat.getString( "passager" );
+                arret = resultat.getString( "arret" );
+                date = resultat.getString("date");
+                direction=resultat.getString("direction");
+                p = new Passages(id,passager,arret,date,direction);
+                ret.add(p);
+            }
+            stmt.close();
+        }catch(Exception e){e.printStackTrace();}
+        return ret;
+    }/*
     public ArrayList<Compteur> getCompteurs(int idSession){
         ArrayList<Compteur> ret = new ArrayList<>();
         try{
@@ -137,7 +157,7 @@ public class DatabaseManager {
 
             stmt.close();
         }catch(Exception e){e.printStackTrace();}*/
-        System.out.println(sql);
+ /*       System.out.println(sql);
         return true;
     }
 
@@ -233,7 +253,7 @@ public class DatabaseManager {
 
         return hmRes;
     }
-
+*/
     public static void main(String[] args) {
         DatabaseManager db = new DatabaseManager();
     }

@@ -1,10 +1,7 @@
-/**
- * Created by Lucas-PC on 09/11/2016.
- */
+
 var ws = null;
 function connect() {
-    var target ='ws://' + window.location.host+"/CompteurWeb/websocket/CreateTimer";
-
+    var target ='ws://' + window.location.host+"/APP_TWAP/websocket/EnvoieDonnes";
     if ('WebSocket' in window) {
         ws = new WebSocket(target);
     } else if ('MozWebSocket' in window) {
@@ -15,36 +12,25 @@ function connect() {
     }
     ws.onopen = function () {
     };
+
     ws.onmessage = function (event) {
-        var test = document.getElementById("testTimer1");
+
+        var test = document.getElementById("testAffichage");
         var testJson = JSON.parse(event.data);
         var string='';
+        string += "<div class=\"col-md-12 col-sm-12\">";
+        string += "<table>";
+        string += " <tr><th>id</th><th>passager</th><th>arret</th><th>date</th><th>direction</th></tr>";
         for(var i =0;i< testJson.length;i++) {
-
-            string += "<div class=\"col-md-6 col-sm-6\">";
-            if(testJson[i].majCompteur=="------------------- FIN -------------------------")
-                string += "<div class=\"divCompteurFIN\">";
-            else
-                string += "<div class=\"divSpecial\">";
-
-            string += "<div class='nomCompteur' >";
-            //string += "ID          : "+testJson[i].id + "<br/>";
-            string += "<b><h2>"+testJson[i].titre+"</h2></b>";
-            string += "</div>";
-            string += "<b>Pays</b>        : "+testJson[i].pays + "<br/>";
-            string += "<b>Ech&eacute;ance</b>    : "+testJson[i].date + "<br/>";
-            string += "<b>TPS restant</b> : "+testJson[i].majCompteur + "<br/><br/>";
-            string += "<div style='text-align: center'>";
-            string += "<form method=\"post\" action=\"/CompteurWeb/modifTimer\">";
-            string += "<input type=\"hidden\" name=\"id\" value=\""+ testJson[i].id +"\">";
-            string += "<button id=\"modif\" name=\"modif\" type=\"submit\" class=\"btn btn-info\">Modifier</button> ";
-            string += "<button id=\"supp\" name=\"supp\" type=\"button\" class=\"btn btn-danger\" " +
-                "onclick=\"supprimer("+testJson[i].id+")\">Supprimer</button><br/><br/>";
-            string += "</form>";
-            string += "</div>";
-            string += "</div>";
-            string += "</div>";
+            string += " <tr><td>"+testJson[i].id+"</td>";
+            string +="<td>"+testJson[i].passager+"</td>";
+            string +="<td>"+testJson[i].arret+"</td>";
+            string +="<td>"+testJson[i].date+"</td>";
+            string +="<td>"+testJson[i].direction+"</td>";
+            string +="</tr>";
         }
+        string+= "</table>";
+        string+= "</div>";
         test.innerHTML= string;
 
 
@@ -53,105 +39,11 @@ function connect() {
     };
 }
 
-function getCookie(cname) {
 
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-
-function refuserToucheEntree(event)
-{
-    // Compatibilité IE / Firefox
-    if(!event && window.event) {
-        event = window.event;
-    }
-    // IE
-    if(event.keyCode == 13) {
-        event.returnValue = false;
-        event.cancelBubble = true;
-    }
-    // DOM
-    if(event.which == 13) {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-}
 
 $(function() {
     connect()
-    /*pour le test*/
-    $("#langue").val("France")
- //   $("#titre").val("TitreCompteur")
-    $("#echeance").val("2016-12-24T00:00")
-    $("#submit").click(function(){
-        var valid = true
-        $("#error-message").text(" ");
-        $("#titre").css("border-color","");
-        $("#echeance").css("border-color","");
-
-        if($("#titre").val() === ""){
-            $("#titre").css("border-color","red");
-            $("#error-message").text("Veuillez entrer un titre");
-            valid = false
-        }
-        if($("#titre").val().match(/[^a-z A-Z 0-9]/)){
-            $("#titre").css("border-color","red");
-            $("#error-message").text(decodeURIComponent(escape("Le titre ne peut être composé que de lettres ou de chiffres")));
-            valid = false
-        }
-        if($("#echeance").val() === ""){
-            $("#echeance").css("border-color","red");
-            $("#error-message").text(decodeURIComponent(escape("Veuillez entrer une échéance")));
-            valid = false
-        }
-        if(new Date($("#echeance").val()) < new Date()){
-            $("#echeance").css("border-color","red");
-            $("#error-message").text(decodeURIComponent(escape("L'échéance ne peut pas être dans le passé")));
-            valid = false
-        }
-        if(valid){
-
-            var iduser = getCookie("userID")
-            var data = {
-                    idSession: iduser
-                    , pays: $("#langue").val()
-                    , titre: $("#titre").val()
-                    , echeance: $("#echeance").val()
-                    , action: "add"
-                };
-
-            ws.send(JSON.stringify(data));
-        }
-
-        return valid
-    })
-
 });
 
-function supprimer(id) {
-    var data = {id : id
-        ,action : "remove"
-    };
-    ws.send(JSON.stringify(data));
-}
-
-function alea() {
-    var iduser = getCookie("userID")
-    var data = {idSession: iduser
-        ,pays : "France"
-        ,action : "random"
-    };
-    ws.send(JSON.stringify(data));
-}
 
 

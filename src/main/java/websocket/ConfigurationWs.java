@@ -11,12 +11,12 @@ import java.util.Map;
  */
 //
 public class ConfigurationWs extends ServerEndpointConfig.Configurator {
-    @Override
+   /* @Override
     public void modifyHandshake(ServerEndpointConfig config,
                                 HandshakeRequest request,
                                 HandshakeResponse response)
     {
         Map<String,List<String>> headers = request.getHeaders();
         config.getUserProperties().put("cookie",headers.get("cookie"));
-    }
+    }*/
 }

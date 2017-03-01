@@ -4,7 +4,7 @@ package websocket;
  * Created by valentinpitel on 04/11/2016.
  */
 
-import beans.Compteur;
+import beans.Passages;
 import com.google.gson.Gson;
 import db.DatabaseManager;
 import org.json.JSONObject;
@@ -22,8 +22,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@ServerEndpoint(value="/websocket/CreateTimer",configurator=ConfigurationWs.class)
-public class CreateTimer {
+@ServerEndpoint(value="/websocket/EnvoieDonnes",configurator=ConfigurationWs.class)
+public class EnvoieDonnes {
     static ScheduledExecutorService timer =
             Executors.newSingleThreadScheduledExecutor();
     private static Set<Session> allSessions;
@@ -34,7 +34,7 @@ public class CreateTimer {
 
     @OnMessage
     public void onMessage(Session session, String jsonMessage) {
-        try {
+       /* try {
             if (session.isOpen()) {
                JSONObject data = new JSONObject(jsonMessage);
 
@@ -42,6 +42,7 @@ public class CreateTimer {
                 SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
                 String newDateFormat = sdf1.format(sdf2.parse(data.getString("echeance")))
                         .toString();*/
+                  /*
                 if(data.getString("action").equals("add"))
                     dbm.ajouterCompteur(new Compteur(0,
                             data.getString("titre"),
@@ -81,7 +82,7 @@ public class CreateTimer {
                             format,
                             data.getInt("idSession")));
                 }
-
+*/
                 /**/
 
                         //.toString();
@@ -90,7 +91,7 @@ public class CreateTimer {
                             data.getString("pays"),newDateFormat,data.getInt("idSession")));*/
 
 
-
+/*
                 session.getId();
             }
         } catch (Exception e) {
@@ -101,7 +102,7 @@ public class CreateTimer {
             } catch (IOException e1) {
                 System.out.println(e1);
             }
-        }
+        }*/
     }
     @OnClose
     public void onClose(final Session session) {
@@ -120,34 +121,22 @@ public class CreateTimer {
 
     private void sendTimeToAll(Session session ){
 
-        ArrayList<Compteur> lst_compteur = new ArrayList<>();
+        ArrayList<Passages> lst_passages = new ArrayList<>();
         try{
             if (session.isOpen()) {
                 Gson gson = new Gson();
                 //session.getUserProperties().get("cookie")[0];
-                String cookies[] = session.getUserProperties().get("cookie")
-                        .toString().split(";");
-                String userID = "";
-                for (int i = 0; i < cookies.length; i++) {
-                    if (cookies[i].contains("userID"))
-                        userID = cookies[i];
-                }
-                userID = userID.substring(userID.indexOf("=") + 1);
-                if (userID.contains("]"))
-                    userID = userID.substring(userID.indexOf("=") + 1, userID.length() - 1);
-                else
-                    userID = userID.substring(userID.indexOf("=") + 1);
-                lst_compteur = dbm.getCompteurs(Integer.parseInt(userID));
-                Compteur c;
-                SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy kk:mm:ss ");
-                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-                for (int i = 0; i < lst_compteur.size(); i++) {
-                    c = lst_compteur.get(i);
-                    c.setMajCompteur(c.diff());
-                    if(isValidFormat("yyyy-MM-dd'T'HH:mm",c.getDate()))
-                        c.setDate(sdf1.format(sdf2.parse(c.getDate())));
-                }
-                String json = gson.toJson(lst_compteur);
+
+                lst_passages = dbm.getPassages();
+                Passages p;
+               /* SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd'T'");
+                for (int i = 0; i < lst_passages.size(); i++) {
+                    p = lst_passages.get(i);
+                    if(isValidFormat("yyyy-MM-dd'",p.getDate()))
+                        p.setDate(sdf1.format(sdf2.parse(p.getDate())));
+                }*/
+                String json = gson.toJson(lst_passages);
                 session.getBasicRemote().sendText(json);
             }else{
                 if (session.isOpen())
