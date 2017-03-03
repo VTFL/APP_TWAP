@@ -8,7 +8,7 @@ Donc, le Gpio 2 pi4j correspond au 27 gpio (7 vers le bas en partant et comptant
 #include <stdio.h>
 #include <time.h>
 
-volatile int tabLed[] = {50, 52};
+volatile int tabLed[] = {50,51,52,53};
 volatile int choixPassager=0;
 volatile int tailleTab=0;
 
