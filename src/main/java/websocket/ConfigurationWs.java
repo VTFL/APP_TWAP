@@ -6,10 +6,6 @@ import javax.websocket.server.ServerEndpointConfig;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by valentinpitel on 09/11/2016.
- */
-//
 public class ConfigurationWs extends ServerEndpointConfig.Configurator {
    /* @Override
     public void modifyHandshake(ServerEndpointConfig config,
