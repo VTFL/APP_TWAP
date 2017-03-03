@@ -1,9 +1,5 @@
 package websocket;
 
-/**
- * Created by valentinpitel on 04/11/2016.
- */
-
 import beans.Passages;
 import com.google.gson.Gson;
 import db.DatabaseManager;
@@ -22,7 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@ServerEndpoint(value="/websocket/EnvoieDonnes",configurator=ConfigurationWs.class)
+@ServerEndpoint(value="/websocket/EnvoieDonnes")
 public class EnvoieDonnes {
     static ScheduledExecutorService timer =
             Executors.newSingleThreadScheduledExecutor();
